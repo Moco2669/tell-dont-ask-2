@@ -10,5 +10,21 @@ namespace TellDontAskKata.Main.Domain
         public decimal Tax { get; set; }
         public OrderStatus Status { get; set; }
         public int Id { get; set; }
+
+        public Order()
+        {
+            Total = 0m;
+            Currency = "EUR";
+            Items = new List<OrderItem>();
+            Tax = 0m;
+            Status = OrderStatus.Created;
+        }
+
+        public void AddItem(OrderItem orderItem)
+        {
+            Items.Add(orderItem);
+            Tax += orderItem.Tax;
+            Total += orderItem.TaxedAmount;
+        }
     }
 }
