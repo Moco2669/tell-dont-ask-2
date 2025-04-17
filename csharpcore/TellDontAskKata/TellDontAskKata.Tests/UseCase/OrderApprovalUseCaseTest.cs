@@ -12,6 +12,7 @@ namespace TellDontAskKata.Tests.UseCase
     {
         private readonly TestOrderRepository _orderRepository;
         private readonly OrderApprovalUseCase _useCase;
+        private readonly Order _anOrder;
 
         private const int AnOrderId = 1;
 
@@ -19,14 +20,14 @@ namespace TellDontAskKata.Tests.UseCase
         {
             _orderRepository = new TestOrderRepository();
             _useCase = new OrderApprovalUseCase(_orderRepository);
+            _anOrder = new Order(AnOrderId);
         }
 
 
         [Fact]
         public void ApprovedExistingOrder()
         {
-            var initialOrder = new Order(AnOrderId);
-            _orderRepository.AddOrder(initialOrder);
+            _orderRepository.AddOrder(_anOrder);
 
             var request = new ApproveRequest(AnOrderId);
 
@@ -39,8 +40,7 @@ namespace TellDontAskKata.Tests.UseCase
         [Fact]
         public void RejectedExistingOrder()
         {
-            var initialOrder = new Order(AnOrderId);
-            _orderRepository.AddOrder(initialOrder);
+            _orderRepository.AddOrder(_anOrder);
 
             var request = new RejectRequest(AnOrderId);
 
@@ -54,10 +54,9 @@ namespace TellDontAskKata.Tests.UseCase
         [Fact]
         public void CannotApproveRejectedOrder()
         {
-            var initialOrder = new Order(AnOrderId);
             var approvalRequest = new RejectRequest(AnOrderId);
-            approvalRequest.ExecuteOn(initialOrder);
-            _orderRepository.AddOrder(initialOrder);
+            approvalRequest.ExecuteOn(_anOrder);
+            _orderRepository.AddOrder(_anOrder);
 
             var request = new ApproveRequest(AnOrderId);
             
@@ -70,10 +69,9 @@ namespace TellDontAskKata.Tests.UseCase
         [Fact]
         public void CannotRejectApprovedOrder()
         {
-            var initialOrder = new Order(AnOrderId);
             var approvalRequest = new ApproveRequest(AnOrderId);
-            approvalRequest.ExecuteOn(initialOrder);
-            _orderRepository.AddOrder(initialOrder);
+            approvalRequest.ExecuteOn(_anOrder);
+            _orderRepository.AddOrder(_anOrder);
 
             var request = new RejectRequest(AnOrderId);
 
@@ -86,11 +84,10 @@ namespace TellDontAskKata.Tests.UseCase
         [Fact]
         public void ShippedOrdersCannotBeRejected()
         {
-            var initialOrder = new Order(AnOrderId);
             var approvalRequest = new ApproveRequest(AnOrderId);
-            approvalRequest.ExecuteOn(initialOrder);
-            initialOrder.Ship();
-            _orderRepository.AddOrder(initialOrder);
+            approvalRequest.ExecuteOn(_anOrder);
+            _anOrder.Ship();
+            _orderRepository.AddOrder(_anOrder);
 
             var request = new RejectRequest(AnOrderId);
 
