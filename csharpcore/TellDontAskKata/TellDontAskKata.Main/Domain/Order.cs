@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using TellDontAskKata.Main.Exceptions;
+using TellDontAskKata.Main.Requests;
 using TellDontAskKata.Main.UseCase;
 
 namespace TellDontAskKata.Main.Domain
@@ -39,18 +40,12 @@ namespace TellDontAskKata.Main.Domain
             foreach(OrderItem item in orderItems) AddItem(item);
         }
 
-        public void ExecuteRequest(OrderApprovalRequest request)
-        {
-            if (request.Approved) Approve();
-            else Reject();
-        }
-
-        private void Approve()
+        public void Approve()
         {
             Status = Status.Approve();
         }
 
-        private void Reject()
+        public void Reject()
         {
             Status = Status.Reject();
         }

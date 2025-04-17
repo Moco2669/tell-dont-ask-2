@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TellDontAskKata.Main.Domain;
 using TellDontAskKata.Main.Exceptions;
 using TellDontAskKata.Main.Repository;
+using TellDontAskKata.Main.Requests;
 using TellDontAskKata.Main.UseCase;
 using TellDontAskKata.Tests.Doubles;
 using Xunit;

@@ -1,5 +1,6 @@
 ﻿using TellDontAskKata.Main.Domain;
 using TellDontAskKata.Main.Repository;
+using TellDontAskKata.Main.Requests;
 using TellDontAskKata.Main.Service;
 
 namespace TellDontAskKata.Main.UseCase
@@ -17,7 +18,7 @@ namespace TellDontAskKata.Main.UseCase
             _shipmentService = shipmentService;
         }
 
-        public void Run(OrderShipmentRequest request)
+        public void Run(ShipRequest request)
         {
             var order = _orderRepository.GetById(request.OrderId);
             _shipmentService.Ship(order);

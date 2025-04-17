@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using TellDontAskKata.Main.Domain;
 using TellDontAskKata.Main.Repository;
+using TellDontAskKata.Main.Requests;
 
 namespace TellDontAskKata.Main.UseCase
 {

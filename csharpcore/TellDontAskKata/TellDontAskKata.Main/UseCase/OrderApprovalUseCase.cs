@@ -1,5 +1,6 @@
 ﻿using TellDontAskKata.Main.Domain;
 using TellDontAskKata.Main.Repository;
+using TellDontAskKata.Main.Requests;
 
 namespace TellDontAskKata.Main.UseCase
 {
@@ -11,10 +12,10 @@ namespace TellDontAskKata.Main.UseCase
             _orderRepository = orderRepository;
         }
 
-        public void Run(OrderApprovalRequest request)
+        public void Run(OrderRequest request)
         {
             var order = _orderRepository.GetById(request.OrderId);
-            order.ExecuteRequest(request);
+            request.ExecuteRequest(order);
             _orderRepository.Save(order);
         }
     }

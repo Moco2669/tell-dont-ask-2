@@ -1,6 +1,8 @@
 ﻿using System;
+using System.ComponentModel;
 using TellDontAskKata.Main.Domain;
 using TellDontAskKata.Main.Exceptions;
+using TellDontAskKata.Main.Requests;
 using TellDontAskKata.Main.UseCase;
 using TellDontAskKata.Tests.Doubles;
 using Xunit;
@@ -26,11 +28,11 @@ namespace TellDontAskKata.Tests.UseCase
         public void ShipApprovedOrder()
         {
             var initialOrder = new Order(AnOrderId);
-            var approvalRequest = new OrderApprovalRequest(AnOrderId, true);
-            initialOrder.ExecuteRequest(approvalRequest);
+            var approvalRequest = new ApproveRequest(AnOrderId);
+            approvalRequest.ExecuteRequest(initialOrder);
             _orderRepository.AddOrder(initialOrder);
 
-            var request = new OrderShipmentRequest(AnOrderId);
+            var request = new ShipRequest(AnOrderId);
 
             _useCase.Run(request);
 
@@ -44,7 +46,7 @@ namespace TellDontAskKata.Tests.UseCase
             var initialOrder = new Order(AnOrderId);
             _orderRepository.AddOrder(initialOrder);
 
-            var request = new OrderShipmentRequest(AnOrderId);
+            var request = new ShipRequest(AnOrderId);
 
             Action actionToTest = () => _useCase.Run(request);
 
@@ -57,11 +59,11 @@ namespace TellDontAskKata.Tests.UseCase
         public void RejectedOrdersCannotBeShipped()
         {
             var initialOrder = new Order(AnOrderId);
-            var approvalRequest = new OrderApprovalRequest(AnOrderId, false);
-            initialOrder.ExecuteRequest(approvalRequest);
+            var approvalRequest = new RejectRequest(AnOrderId);
+            approvalRequest.ExecuteRequest(initialOrder);
             _orderRepository.AddOrder(initialOrder);
 
-            var request = new OrderShipmentRequest(AnOrderId);
+            var request = new ShipRequest(AnOrderId);
 
             Action actionToTest = () => _useCase.Run(request);
 
@@ -74,12 +76,12 @@ namespace TellDontAskKata.Tests.UseCase
         public void ShippedOrdersCannotBeShippedAgain()
         {
             var initialOrder = new Order(AnOrderId);
-            var approvalRequest = new OrderApprovalRequest(AnOrderId, true);
-            initialOrder.ExecuteRequest(approvalRequest);
+            var approvalRequest = new ApproveRequest(AnOrderId);
+            approvalRequest.ExecuteRequest(initialOrder);
             initialOrder.Ship();
             _orderRepository.AddOrder(initialOrder);
 
-            var request = new OrderShipmentRequest(AnOrderId);
+            var request = new ShipRequest(AnOrderId);
 
             Action actionToTest = () => _useCase.Run(request);
 

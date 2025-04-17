@@ -1,4 +1,4 @@
-﻿namespace TellDontAskKata.Main.UseCase
+﻿namespace TellDontAskKata.Main.Requests
 {
     public class SellItemRequest
     {
