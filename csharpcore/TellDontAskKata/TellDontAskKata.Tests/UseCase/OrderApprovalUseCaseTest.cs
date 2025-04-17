@@ -52,10 +52,9 @@ namespace TellDontAskKata.Tests.UseCase
         [Fact]
         public void CannotApproveRejectedOrder()
         {
-            var initialOrder = new Order
+            var initialOrder = new Order(AnOrderId)
             {
                 Status = OrderStatus.Rejected,
-                Id = AnOrderId
             };
             _orderRepository.AddOrder(initialOrder);
 
@@ -70,10 +69,9 @@ namespace TellDontAskKata.Tests.UseCase
         [Fact]
         public void CannotRejectApprovedOrder()
         {
-            var initialOrder = new Order
+            var initialOrder = new Order(AnOrderId)
             {
                 Status = OrderStatus.Approved,
-                Id = AnOrderId
             };
             _orderRepository.AddOrder(initialOrder);
 
@@ -89,10 +87,9 @@ namespace TellDontAskKata.Tests.UseCase
         [Fact]
         public void ShippedOrdersCannotBeRejected()
         {
-            var initialOrder = new Order
+            var initialOrder = new Order(AnOrderId)
             {
                 Status = OrderStatus.Shipped,
-                Id = AnOrderId
             };
             _orderRepository.AddOrder(initialOrder);
 
