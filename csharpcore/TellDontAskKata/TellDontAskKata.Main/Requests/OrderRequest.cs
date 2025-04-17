@@ -11,6 +11,6 @@ namespace TellDontAskKata.Main.Requests
             OrderId = orderId;
         }
 
-        public abstract void ExecuteRequest(Order order);
+        public abstract void ExecuteOn(Order order);
     }
 }

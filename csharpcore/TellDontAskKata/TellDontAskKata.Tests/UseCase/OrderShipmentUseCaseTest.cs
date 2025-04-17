@@ -30,7 +30,7 @@ namespace TellDontAskKata.Tests.UseCase
         public void ShipApprovedOrder()
         {
             var approvalRequest = new ApproveRequest(AnOrderId);
-            approvalRequest.ExecuteRequest(_anOrder);
+            approvalRequest.ExecuteOn(_anOrder);
             _orderRepository.AddOrder(_anOrder);
 
             var request = new ShipRequest(AnOrderId);
@@ -59,7 +59,7 @@ namespace TellDontAskKata.Tests.UseCase
         public void RejectedOrdersCannotBeShipped()
         {
             var approvalRequest = new RejectRequest(AnOrderId);
-            approvalRequest.ExecuteRequest(_anOrder);
+            approvalRequest.ExecuteOn(_anOrder);
             _orderRepository.AddOrder(_anOrder);
 
             var request = new ShipRequest(AnOrderId);
@@ -75,7 +75,7 @@ namespace TellDontAskKata.Tests.UseCase
         public void ShippedOrdersCannotBeShippedAgain()
         {
             var approvalRequest = new ApproveRequest(AnOrderId);
-            approvalRequest.ExecuteRequest(_anOrder);
+            approvalRequest.ExecuteOn(_anOrder);
             _anOrder.Ship();
             _orderRepository.AddOrder(_anOrder);
 

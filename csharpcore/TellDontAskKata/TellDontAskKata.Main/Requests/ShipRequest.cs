@@ -8,7 +8,7 @@ namespace TellDontAskKata.Main.Requests
         {
         }
 
-        public override void ExecuteRequest(Order order)
+        public override void ExecuteOn(Order order)
         {
             order.Ship();
         }

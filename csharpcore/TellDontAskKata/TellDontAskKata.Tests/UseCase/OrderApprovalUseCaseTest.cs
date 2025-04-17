@@ -56,7 +56,7 @@ namespace TellDontAskKata.Tests.UseCase
         {
             var initialOrder = new Order(AnOrderId);
             var approvalRequest = new RejectRequest(AnOrderId);
-            approvalRequest.ExecuteRequest(initialOrder);
+            approvalRequest.ExecuteOn(initialOrder);
             _orderRepository.AddOrder(initialOrder);
 
             var request = new ApproveRequest(AnOrderId);
@@ -72,7 +72,7 @@ namespace TellDontAskKata.Tests.UseCase
         {
             var initialOrder = new Order(AnOrderId);
             var approvalRequest = new ApproveRequest(AnOrderId);
-            approvalRequest.ExecuteRequest(initialOrder);
+            approvalRequest.ExecuteOn(initialOrder);
             _orderRepository.AddOrder(initialOrder);
 
             var request = new RejectRequest(AnOrderId);
@@ -88,7 +88,7 @@ namespace TellDontAskKata.Tests.UseCase
         {
             var initialOrder = new Order(AnOrderId);
             var approvalRequest = new ApproveRequest(AnOrderId);
-            approvalRequest.ExecuteRequest(initialOrder);
+            approvalRequest.ExecuteOn(initialOrder);
             initialOrder.Ship();
             _orderRepository.AddOrder(initialOrder);
 
