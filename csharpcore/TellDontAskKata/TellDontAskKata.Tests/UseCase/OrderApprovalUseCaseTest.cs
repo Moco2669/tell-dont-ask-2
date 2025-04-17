@@ -21,14 +21,12 @@ namespace TellDontAskKata.Tests.UseCase
             _orderRepository = new TestOrderRepository();
             _useCase = new OrderApprovalUseCase(_orderRepository);
             _anOrder = new Order(AnOrderId);
+            _orderRepository.AddOrder(_anOrder);
         }
-
-
+        
         [Fact]
         public void ApprovedExistingOrder()
         {
-            _orderRepository.AddOrder(_anOrder);
-
             var request = new ApproveRequest(AnOrderId);
 
             _useCase.Run(request);
@@ -40,8 +38,6 @@ namespace TellDontAskKata.Tests.UseCase
         [Fact]
         public void RejectedExistingOrder()
         {
-            _orderRepository.AddOrder(_anOrder);
-
             var request = new RejectRequest(AnOrderId);
 
             _useCase.Run(request);
@@ -50,13 +46,11 @@ namespace TellDontAskKata.Tests.UseCase
             Assert.True(savedOrder.StatusIs(new Rejected()));
         }
 
-
         [Fact]
         public void CannotApproveRejectedOrder()
         {
             var approvalRequest = new RejectRequest(AnOrderId);
             approvalRequest.ExecuteOn(_anOrder);
-            _orderRepository.AddOrder(_anOrder);
 
             var request = new ApproveRequest(AnOrderId);
             
@@ -71,7 +65,6 @@ namespace TellDontAskKata.Tests.UseCase
         {
             var approvalRequest = new ApproveRequest(AnOrderId);
             approvalRequest.ExecuteOn(_anOrder);
-            _orderRepository.AddOrder(_anOrder);
 
             var request = new RejectRequest(AnOrderId);
 
@@ -87,7 +80,6 @@ namespace TellDontAskKata.Tests.UseCase
             var approvalRequest = new ApproveRequest(AnOrderId);
             approvalRequest.ExecuteOn(_anOrder);
             _anOrder.Ship();
-            _orderRepository.AddOrder(_anOrder);
 
             var request = new RejectRequest(AnOrderId);
 
@@ -96,6 +88,5 @@ namespace TellDontAskKata.Tests.UseCase
             Assert.Throws<ShippedOrdersCannotBeChangedException>(actionToTest);
             Assert.Null(_orderRepository.GetSavedOrder());
         }
-
     }
 }
