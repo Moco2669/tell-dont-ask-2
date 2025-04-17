@@ -24,6 +24,7 @@ namespace TellDontAskKata.Tests.UseCase
             _shipmentService = new TestShipmentService();
             _useCase = new OrderShipmentUseCase(_orderRepository, _shipmentService);
             _anOrder = new Order(AnOrderId);
+            _orderRepository.AddOrder(_anOrder);
         }
         
         [Fact]
@@ -31,7 +32,6 @@ namespace TellDontAskKata.Tests.UseCase
         {
             var approvalRequest = new ApproveRequest(AnOrderId);
             approvalRequest.ExecuteOn(_anOrder);
-            _orderRepository.AddOrder(_anOrder);
 
             var request = new ShipRequest(AnOrderId);
 
@@ -44,8 +44,6 @@ namespace TellDontAskKata.Tests.UseCase
         [Fact]
         public void CreatedOrdersCannotBeShipped()
         {
-            _orderRepository.AddOrder(_anOrder);
-
             var request = new ShipRequest(AnOrderId);
 
             Action actionToTest = () => _useCase.Run(request);
@@ -60,7 +58,6 @@ namespace TellDontAskKata.Tests.UseCase
         {
             var approvalRequest = new RejectRequest(AnOrderId);
             approvalRequest.ExecuteOn(_anOrder);
-            _orderRepository.AddOrder(_anOrder);
 
             var request = new ShipRequest(AnOrderId);
 
@@ -77,7 +74,6 @@ namespace TellDontAskKata.Tests.UseCase
             var approvalRequest = new ApproveRequest(AnOrderId);
             approvalRequest.ExecuteOn(_anOrder);
             _anOrder.Ship();
-            _orderRepository.AddOrder(_anOrder);
 
             var request = new ShipRequest(AnOrderId);
 
