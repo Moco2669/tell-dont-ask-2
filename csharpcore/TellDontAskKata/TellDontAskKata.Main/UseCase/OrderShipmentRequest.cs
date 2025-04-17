@@ -2,6 +2,15 @@
 {
     public class OrderShipmentRequest
     {
-        public int OrderId { get; set; }
+        public OrderShipmentRequest()
+        {
+        }
+
+        public OrderShipmentRequest(int orderId)
+        {
+            OrderId = orderId;
+        }
+
+        public int OrderId { get; }
     }
 }

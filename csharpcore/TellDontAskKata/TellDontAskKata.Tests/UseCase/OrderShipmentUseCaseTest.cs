@@ -12,28 +12,25 @@ namespace TellDontAskKata.Tests.UseCase
         private readonly TestShipmentService _shipmentService;
         private readonly OrderShipmentUseCase _useCase;
 
+        private const int AnOrderId = 1;
+
         public OrderShipmentUseCaseTest()
         {
             _orderRepository = new TestOrderRepository();
             _shipmentService = new TestShipmentService();
             _useCase = new OrderShipmentUseCase(_orderRepository, _shipmentService);
         }
-
-
+        
         [Fact]
         public void ShipApprovedOrder()
         {
-            var initialOrder = new Order
+            var initialOrder = new Order(AnOrderId)
             {
                 Status = OrderStatus.Approved,
-                Id = 1
             };
             _orderRepository.AddOrder(initialOrder);
 
-            var request = new OrderShipmentRequest
-            {
-                OrderId = 1
-            };
+            var request = new OrderShipmentRequest(AnOrderId);
 
             _useCase.Run(request);
 
@@ -44,17 +41,13 @@ namespace TellDontAskKata.Tests.UseCase
         [Fact]
         public void CreatedOrdersCannotBeShipped()
         {
-            var initialOrder = new Order
+            var initialOrder = new Order(AnOrderId)
             {
                 Status = OrderStatus.Created,
-                Id = 1
             };
             _orderRepository.AddOrder(initialOrder);
 
-            var request = new OrderShipmentRequest
-            {
-                OrderId = 1
-            };
+            var request = new OrderShipmentRequest(AnOrderId);
 
             Action actionToTest = () => _useCase.Run(request);
 
@@ -66,17 +59,13 @@ namespace TellDontAskKata.Tests.UseCase
         [Fact]
         public void RejectedOrdersCannotBeShipped()
         {
-            var initialOrder = new Order
+            var initialOrder = new Order(AnOrderId)
             {
                 Status = OrderStatus.Rejected,
-                Id = 1
             };
             _orderRepository.AddOrder(initialOrder);
 
-            var request = new OrderShipmentRequest
-            {
-                OrderId = 1
-            };
+            var request = new OrderShipmentRequest(AnOrderId);
 
             Action actionToTest = () => _useCase.Run(request);
 
@@ -88,17 +77,13 @@ namespace TellDontAskKata.Tests.UseCase
         [Fact]
         public void ShippedOrdersCannotBeShippedAgain()
         {
-            var initialOrder = new Order
+            var initialOrder = new Order(AnOrderId)
             {
-                Status = OrderStatus.Shipped,
-                Id = 1
+                Status = OrderStatus.Shipped
             };
             _orderRepository.AddOrder(initialOrder);
 
-            var request = new OrderShipmentRequest
-            {
-                OrderId = 1
-            };
+            var request = new OrderShipmentRequest(AnOrderId);
 
             Action actionToTest = () => _useCase.Run(request);
 
@@ -106,7 +91,5 @@ namespace TellDontAskKata.Tests.UseCase
             Assert.Null(_orderRepository.GetSavedOrder());
             Assert.Null(_shipmentService.GetShippedOrder());
         }
-
-
     }
 }
