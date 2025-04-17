@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
+using TellDontAskKata.Main.UseCase;
 
 namespace TellDontAskKata.Main.Domain
 {
     public class Order
     {
         public decimal Total { get; set; }
-        public string Currency { get; set; }
-        public IList<OrderItem> Items { get; set; }
+        public string Currency { get; }
+        public IList<OrderItem> Items { get; }
         public decimal Tax { get; set; }
         public OrderStatus Status { get; set; }
         public int Id { get; set; }
@@ -25,6 +26,11 @@ namespace TellDontAskKata.Main.Domain
             Items.Add(orderItem);
             Tax += orderItem.Tax;
             Total += orderItem.TaxedAmount;
+        }
+
+        public void AddItems(List<OrderItem> orderItems)
+        {
+            foreach(OrderItem item in orderItems) AddItem(item);
         }
     }
 }

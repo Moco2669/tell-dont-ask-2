@@ -2,6 +2,7 @@
 using System.Linq;
 using TellDontAskKata.Main.Domain;
 using TellDontAskKata.Main.Repository;
+using TellDontAskKata.Main.UseCase;
 
 namespace TellDontAskKata.Tests.Doubles
 {
@@ -16,7 +17,9 @@ namespace TellDontAskKata.Tests.Doubles
 
         public Product GetByName(string name)
         {
-            return _products.FirstOrDefault(p => p.Name == name);
+            var product = _products.FirstOrDefault(p => p.Name == name);
+            if (product == null) throw new UnknownProductException();
+            return product;
         }
     }
 }

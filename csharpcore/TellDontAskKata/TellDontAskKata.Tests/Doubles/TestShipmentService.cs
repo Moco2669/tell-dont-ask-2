@@ -16,7 +16,5 @@ namespace TellDontAskKata.Tests.Doubles
         {
             return _shippedOrder;
         }
-
-
     }
 }
