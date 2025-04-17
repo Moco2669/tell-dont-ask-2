@@ -21,6 +21,11 @@ namespace TellDontAskKata.Main.Domain
             Status = OrderStatus.Created;
         }
 
+        public Order(int id) : this()
+        {
+            Id = id;
+        }
+
         public void AddItem(OrderItem orderItem)
         {
             Items.Add(orderItem);
@@ -31,6 +36,26 @@ namespace TellDontAskKata.Main.Domain
         public void AddItems(List<OrderItem> orderItems)
         {
             foreach(OrderItem item in orderItems) AddItem(item);
+        }
+
+        public void ExecuteRequest(OrderApprovalRequest request)
+        {
+            if (request.Approved) Approve();
+            else Reject();
+        }
+
+        private void Approve()
+        {
+            if (Status == OrderStatus.Shipped) throw new ShippedOrdersCannotBeChangedException();
+            if (Status == OrderStatus.Rejected) throw new RejectedOrderCannotBeApprovedException();
+            Status = OrderStatus.Approved;
+        }
+
+        private void Reject()
+        {
+            if (Status == OrderStatus.Shipped) throw new ShippedOrdersCannotBeChangedException();
+            if (Status == OrderStatus.Approved) throw new ApprovedOrderCannotBeRejectedException();
+            Status = OrderStatus.Rejected;
         }
     }
 }

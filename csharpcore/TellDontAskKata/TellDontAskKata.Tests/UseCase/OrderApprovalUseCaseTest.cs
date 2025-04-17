@@ -11,6 +11,8 @@ namespace TellDontAskKata.Tests.UseCase
         private readonly TestOrderRepository _orderRepository;
         private readonly OrderApprovalUseCase _useCase;
 
+        private const int AnOrderId = 1;
+
         public OrderApprovalUseCaseTest()
         {
             _orderRepository = new TestOrderRepository();
@@ -21,18 +23,10 @@ namespace TellDontAskKata.Tests.UseCase
         [Fact]
         public void ApprovedExistingOrder()
         {
-            var initialOrder = new Order
-            {
-                Status = OrderStatus.Created,
-                Id = 1
-            };
+            var initialOrder = new Order(AnOrderId);
             _orderRepository.AddOrder(initialOrder);
 
-            var request = new OrderApprovalRequest
-            {
-                OrderId = 1,
-                Approved = true
-            };
+            var request = new OrderApprovalRequest(AnOrderId, true);
 
             _useCase.Run(request);
 
@@ -43,18 +37,10 @@ namespace TellDontAskKata.Tests.UseCase
         [Fact]
         public void RejectedExistingOrder()
         {
-            var initialOrder = new Order
-            {
-                Status = OrderStatus.Created,
-                Id = 1
-            };
+            var initialOrder = new Order(AnOrderId);
             _orderRepository.AddOrder(initialOrder);
 
-            var request = new OrderApprovalRequest
-            {
-                OrderId = 1,
-                Approved = false
-            };
+            var request = new OrderApprovalRequest(AnOrderId, false);
 
             _useCase.Run(request);
 
@@ -69,17 +55,12 @@ namespace TellDontAskKata.Tests.UseCase
             var initialOrder = new Order
             {
                 Status = OrderStatus.Rejected,
-                Id = 1
+                Id = AnOrderId
             };
             _orderRepository.AddOrder(initialOrder);
 
-            var request = new OrderApprovalRequest
-            {
-                OrderId = 1,
-                Approved = true
-            };
-
-
+            var request = new OrderApprovalRequest(AnOrderId, true);
+            
             Action actionToTest = () => _useCase.Run(request);
       
             Assert.Throws<RejectedOrderCannotBeApprovedException>(actionToTest);
@@ -92,15 +73,11 @@ namespace TellDontAskKata.Tests.UseCase
             var initialOrder = new Order
             {
                 Status = OrderStatus.Approved,
-                Id = 1
+                Id = AnOrderId
             };
             _orderRepository.AddOrder(initialOrder);
 
-            var request = new OrderApprovalRequest
-            {
-                OrderId = 1,
-                Approved = false
-            };
+            var request = new OrderApprovalRequest(AnOrderId, false);
 
 
             Action actionToTest = () => _useCase.Run(request);
@@ -115,16 +92,11 @@ namespace TellDontAskKata.Tests.UseCase
             var initialOrder = new Order
             {
                 Status = OrderStatus.Shipped,
-                Id = 1
+                Id = AnOrderId
             };
             _orderRepository.AddOrder(initialOrder);
 
-            var request = new OrderApprovalRequest
-            {
-                OrderId = 1,
-                Approved = false
-            };
-
+            var request = new OrderApprovalRequest(AnOrderId, false);
 
             Action actionToTest = () => _useCase.Run(request);
 
