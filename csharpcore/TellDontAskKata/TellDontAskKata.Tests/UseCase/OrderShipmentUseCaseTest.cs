@@ -14,6 +14,7 @@ namespace TellDontAskKata.Tests.UseCase
         private readonly TestOrderRepository _orderRepository;
         private readonly TestShipmentService _shipmentService;
         private readonly OrderShipmentUseCase _useCase;
+        private readonly Order _anOrder;
 
         private const int AnOrderId = 1;
 
@@ -22,29 +23,28 @@ namespace TellDontAskKata.Tests.UseCase
             _orderRepository = new TestOrderRepository();
             _shipmentService = new TestShipmentService();
             _useCase = new OrderShipmentUseCase(_orderRepository, _shipmentService);
+            _anOrder = new Order(AnOrderId);
         }
         
         [Fact]
         public void ShipApprovedOrder()
         {
-            var initialOrder = new Order(AnOrderId);
             var approvalRequest = new ApproveRequest(AnOrderId);
-            approvalRequest.ExecuteRequest(initialOrder);
-            _orderRepository.AddOrder(initialOrder);
+            approvalRequest.ExecuteRequest(_anOrder);
+            _orderRepository.AddOrder(_anOrder);
 
             var request = new ShipRequest(AnOrderId);
 
             _useCase.Run(request);
 
             Assert.True(_orderRepository.GetSavedOrder().StatusIs(new Shipped()));
-            Assert.Same(initialOrder, _shipmentService.GetShippedOrder());
+            Assert.Same(_anOrder, _shipmentService.GetShippedOrder());
         }
 
         [Fact]
         public void CreatedOrdersCannotBeShipped()
         {
-            var initialOrder = new Order(AnOrderId);
-            _orderRepository.AddOrder(initialOrder);
+            _orderRepository.AddOrder(_anOrder);
 
             var request = new ShipRequest(AnOrderId);
 
@@ -58,10 +58,9 @@ namespace TellDontAskKata.Tests.UseCase
         [Fact]
         public void RejectedOrdersCannotBeShipped()
         {
-            var initialOrder = new Order(AnOrderId);
             var approvalRequest = new RejectRequest(AnOrderId);
-            approvalRequest.ExecuteRequest(initialOrder);
-            _orderRepository.AddOrder(initialOrder);
+            approvalRequest.ExecuteRequest(_anOrder);
+            _orderRepository.AddOrder(_anOrder);
 
             var request = new ShipRequest(AnOrderId);
 
@@ -75,11 +74,10 @@ namespace TellDontAskKata.Tests.UseCase
         [Fact]
         public void ShippedOrdersCannotBeShippedAgain()
         {
-            var initialOrder = new Order(AnOrderId);
             var approvalRequest = new ApproveRequest(AnOrderId);
-            approvalRequest.ExecuteRequest(initialOrder);
-            initialOrder.Ship();
-            _orderRepository.AddOrder(initialOrder);
+            approvalRequest.ExecuteRequest(_anOrder);
+            _anOrder.Ship();
+            _orderRepository.AddOrder(_anOrder);
 
             var request = new ShipRequest(AnOrderId);
 
