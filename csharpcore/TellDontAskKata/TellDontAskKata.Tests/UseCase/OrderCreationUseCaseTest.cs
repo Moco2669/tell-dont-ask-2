@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TellDontAskKata.Main.Domain;
+using TellDontAskKata.Main.Exceptions;
 using TellDontAskKata.Main.Repository;
 using TellDontAskKata.Main.UseCase;
 using TellDontAskKata.Tests.Doubles;
@@ -51,7 +52,7 @@ namespace TellDontAskKata.Tests.UseCase
             _useCase.Run(request);
 
             Order insertedOrder = _orderRepository.GetSavedOrder();
-            Assert.Equal(OrderStatus.Created, insertedOrder.Status);
+            Assert.Equal(new Created(), insertedOrder.Status);
             Assert.Equal(23.20m, insertedOrder.Total);
             Assert.Equal(2.13m, insertedOrder.Tax);
             Assert.Equal("EUR", insertedOrder.Currency);

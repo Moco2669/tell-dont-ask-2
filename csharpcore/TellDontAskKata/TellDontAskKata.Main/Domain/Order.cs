@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TellDontAskKata.Main.Exceptions;
 using TellDontAskKata.Main.UseCase;
 
 namespace TellDontAskKata.Main.Domain
@@ -9,7 +10,7 @@ namespace TellDontAskKata.Main.Domain
         public string Currency { get; }
         public IList<OrderItem> Items { get; }
         public decimal Tax { get; private set; }
-        public OrderStatus Status { get; set; }
+        public OrderStatus Status { get; private set; }
         public int Id { get; }
 
         public Order()
@@ -18,7 +19,7 @@ namespace TellDontAskKata.Main.Domain
             Currency = "EUR";
             Items = new List<OrderItem>();
             Tax = 0m;
-            Status = OrderStatus.Created;
+            Status = new Created();
         }
 
         public Order(int id) : this()
@@ -46,23 +47,22 @@ namespace TellDontAskKata.Main.Domain
 
         private void Approve()
         {
-            if (Status == OrderStatus.Shipped) throw new ShippedOrdersCannotBeChangedException();
-            if (Status == OrderStatus.Rejected) throw new RejectedOrderCannotBeApprovedException();
-            Status = OrderStatus.Approved;
+            Status = Status.Approve();
         }
 
         private void Reject()
         {
-            if (Status == OrderStatus.Shipped) throw new ShippedOrdersCannotBeChangedException();
-            if (Status == OrderStatus.Approved) throw new ApprovedOrderCannotBeRejectedException();
-            Status = OrderStatus.Rejected;
+            Status = Status.Reject();
         }
 
         public void Ship()
         {
-            if (Status == OrderStatus.Shipped) throw new OrderCannotBeShippedTwiceException();
-            if (Status == OrderStatus.Rejected || Status == OrderStatus.Created) throw new OrderCannotBeShippedException();
-            Status = OrderStatus.Shipped;
+            Status = Status.Ship();
+        }
+
+        public bool StatusIs(OrderStatus status)
+        {
+            return Status.Equals(status);
         }
     }
 }

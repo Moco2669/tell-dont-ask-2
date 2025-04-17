@@ -1,10 +1,15 @@
-﻿namespace TellDontAskKata.Main.Domain
+﻿using TellDontAskKata.Main.UseCase;
+
+namespace TellDontAskKata.Main.Domain
 {
-    public enum OrderStatus
+    public abstract class OrderStatus
     {
-        Approved, 
-        Rejected, 
-        Shipped, 
-        Created
+        public abstract OrderStatus Approve();
+        public abstract OrderStatus Reject();
+        public abstract OrderStatus Ship();
+        public override bool Equals(object obj)
+        {
+            return obj?.GetType() == GetType();
+        }
     }
 }

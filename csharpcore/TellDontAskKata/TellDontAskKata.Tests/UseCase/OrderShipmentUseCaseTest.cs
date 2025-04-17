@@ -1,5 +1,6 @@
 ﻿using System;
 using TellDontAskKata.Main.Domain;
+using TellDontAskKata.Main.Exceptions;
 using TellDontAskKata.Main.UseCase;
 using TellDontAskKata.Tests.Doubles;
 using Xunit;
@@ -24,27 +25,23 @@ namespace TellDontAskKata.Tests.UseCase
         [Fact]
         public void ShipApprovedOrder()
         {
-            var initialOrder = new Order(AnOrderId)
-            {
-                Status = OrderStatus.Approved,
-            };
+            var initialOrder = new Order(AnOrderId);
+            var approvalRequest = new OrderApprovalRequest(AnOrderId, true);
+            initialOrder.ExecuteRequest(approvalRequest);
             _orderRepository.AddOrder(initialOrder);
 
             var request = new OrderShipmentRequest(AnOrderId);
 
             _useCase.Run(request);
 
-            Assert.Equal(OrderStatus.Shipped, _orderRepository.GetSavedOrder().Status);
+            Assert.True(_orderRepository.GetSavedOrder().StatusIs(new Shipped()));
             Assert.Same(initialOrder, _shipmentService.GetShippedOrder());
         }
 
         [Fact]
         public void CreatedOrdersCannotBeShipped()
         {
-            var initialOrder = new Order(AnOrderId)
-            {
-                Status = OrderStatus.Created,
-            };
+            var initialOrder = new Order(AnOrderId);
             _orderRepository.AddOrder(initialOrder);
 
             var request = new OrderShipmentRequest(AnOrderId);
@@ -59,10 +56,9 @@ namespace TellDontAskKata.Tests.UseCase
         [Fact]
         public void RejectedOrdersCannotBeShipped()
         {
-            var initialOrder = new Order(AnOrderId)
-            {
-                Status = OrderStatus.Rejected,
-            };
+            var initialOrder = new Order(AnOrderId);
+            var approvalRequest = new OrderApprovalRequest(AnOrderId, false);
+            initialOrder.ExecuteRequest(approvalRequest);
             _orderRepository.AddOrder(initialOrder);
 
             var request = new OrderShipmentRequest(AnOrderId);
@@ -77,10 +73,10 @@ namespace TellDontAskKata.Tests.UseCase
         [Fact]
         public void ShippedOrdersCannotBeShippedAgain()
         {
-            var initialOrder = new Order(AnOrderId)
-            {
-                Status = OrderStatus.Shipped
-            };
+            var initialOrder = new Order(AnOrderId);
+            var approvalRequest = new OrderApprovalRequest(AnOrderId, true);
+            initialOrder.ExecuteRequest(approvalRequest);
+            initialOrder.Ship();
             _orderRepository.AddOrder(initialOrder);
 
             var request = new OrderShipmentRequest(AnOrderId);

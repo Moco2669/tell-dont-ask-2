@@ -1,5 +1,6 @@
 ﻿using System;
 using TellDontAskKata.Main.Domain;
+using TellDontAskKata.Main.Exceptions;
 using TellDontAskKata.Main.UseCase;
 using TellDontAskKata.Tests.Doubles;
 using Xunit;
@@ -31,7 +32,7 @@ namespace TellDontAskKata.Tests.UseCase
             _useCase.Run(request);
 
             var savedOrder = _orderRepository.GetSavedOrder();
-            Assert.Equal(OrderStatus.Approved, savedOrder.Status);
+            Assert.True(savedOrder.StatusIs(new Approved()));
         }
 
         [Fact]
@@ -45,17 +46,16 @@ namespace TellDontAskKata.Tests.UseCase
             _useCase.Run(request);
 
             var savedOrder = _orderRepository.GetSavedOrder();
-            Assert.Equal(OrderStatus.Rejected, savedOrder.Status);
+            Assert.True(savedOrder.StatusIs(new Rejected()));
         }
 
 
         [Fact]
         public void CannotApproveRejectedOrder()
         {
-            var initialOrder = new Order(AnOrderId)
-            {
-                Status = OrderStatus.Rejected,
-            };
+            var initialOrder = new Order(AnOrderId);
+            var approvalRequest = new OrderApprovalRequest(AnOrderId, false);
+            initialOrder.ExecuteRequest(approvalRequest);
             _orderRepository.AddOrder(initialOrder);
 
             var request = new OrderApprovalRequest(AnOrderId, true);
@@ -69,10 +69,9 @@ namespace TellDontAskKata.Tests.UseCase
         [Fact]
         public void CannotRejectApprovedOrder()
         {
-            var initialOrder = new Order(AnOrderId)
-            {
-                Status = OrderStatus.Approved,
-            };
+            var initialOrder = new Order(AnOrderId);
+            var approvalRequest = new OrderApprovalRequest(AnOrderId, true);
+            initialOrder.ExecuteRequest(approvalRequest);
             _orderRepository.AddOrder(initialOrder);
 
             var request = new OrderApprovalRequest(AnOrderId, false);
@@ -87,10 +86,10 @@ namespace TellDontAskKata.Tests.UseCase
         [Fact]
         public void ShippedOrdersCannotBeRejected()
         {
-            var initialOrder = new Order(AnOrderId)
-            {
-                Status = OrderStatus.Shipped,
-            };
+            var initialOrder = new Order(AnOrderId);
+            var approvalRequest = new OrderApprovalRequest(AnOrderId, true);
+            initialOrder.ExecuteRequest(approvalRequest);
+            initialOrder.Ship();
             _orderRepository.AddOrder(initialOrder);
 
             var request = new OrderApprovalRequest(AnOrderId, false);

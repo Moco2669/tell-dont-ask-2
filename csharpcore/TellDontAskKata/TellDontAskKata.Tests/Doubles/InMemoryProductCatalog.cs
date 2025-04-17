@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using TellDontAskKata.Main.Domain;
+using TellDontAskKata.Main.Exceptions;
 using TellDontAskKata.Main.Repository;
 using TellDontAskKata.Main.UseCase;
 
