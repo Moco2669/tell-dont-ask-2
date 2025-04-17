@@ -6,7 +6,7 @@ namespace TellDontAskKata.Main.Requests
     {
         public int OrderId { get; }
         
-        public OrderRequest(int orderId)
+        protected OrderRequest(int orderId)
         {
             OrderId = orderId;
         }
