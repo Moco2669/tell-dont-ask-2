@@ -8,7 +8,7 @@
             Approved = approved;
         }
 
-        public int OrderId { get; set; }
-        public bool Approved { get; set; }
+        public int OrderId { get; }
+        public bool Approved { get; }
     }
 }

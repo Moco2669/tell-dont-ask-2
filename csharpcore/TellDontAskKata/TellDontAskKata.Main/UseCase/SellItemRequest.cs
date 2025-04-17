@@ -17,7 +17,7 @@
             ProductName = productName;
         }
 
-        public int Quantity { get; set; }
-        public string ProductName { get; set; }
+        public int Quantity { get; }
+        public string ProductName { get; }
     }
 }
