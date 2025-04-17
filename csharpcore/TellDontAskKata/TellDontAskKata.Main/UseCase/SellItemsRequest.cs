@@ -13,6 +13,6 @@ namespace TellDontAskKata.Main.UseCase
             Requests = requests;
         }
 
-        public IList<SellItemRequest> Requests { get; set; }
+        public IList<SellItemRequest> Requests { get; }
     }
 }
