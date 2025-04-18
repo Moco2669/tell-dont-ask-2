@@ -20,14 +20,14 @@ namespace TellDontAskKata.Main.UseCase
 
         public void Run(SellItemsRequest request)
         {
-            var itemsToOrder = OrderItemsFrom(request);
+            var itemsToOrder = ItemsToOrderFrom(request);
             var order = new Order();
             order.AddItems(itemsToOrder);
 
             _orderRepository.Save(order);
         }
 
-        private List<OrderItem> OrderItemsFrom(SellItemsRequest request)
+        private List<OrderItem> ItemsToOrderFrom(SellItemsRequest request)
         {
             List<OrderItem> orderItems = new List<OrderItem>();
             foreach(var itemRequest in request.ItemsToOrder){
