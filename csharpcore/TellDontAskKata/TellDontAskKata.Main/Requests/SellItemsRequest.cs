@@ -8,11 +8,11 @@ namespace TellDontAskKata.Main.Requests
         {
         }
 
-        public SellItemsRequest(IList<SellItemRequest> requests)
+        public SellItemsRequest(IList<ItemToOrder> itemsToOrder)
         {
-            Requests = requests;
+            ItemsToOrder = itemsToOrder;
         }
 
-        public IList<SellItemRequest> Requests { get; }
+        public IList<ItemToOrder> ItemsToOrder { get; }
     }
 }

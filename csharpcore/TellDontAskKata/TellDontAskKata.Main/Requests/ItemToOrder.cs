@@ -1,18 +1,18 @@
 ﻿namespace TellDontAskKata.Main.Requests
 {
-    public class SellItemRequest
+    public class ItemToOrder
     {
-        public SellItemRequest()
+        public ItemToOrder()
         {
         }
 
-        public SellItemRequest(string productName, int quantity)
+        public ItemToOrder(string productName, int quantity)
         {
             ProductName = productName;
             Quantity = quantity;
         }
 
-        public SellItemRequest(string productName) : this()
+        public ItemToOrder(string productName) : this()
         {
             ProductName = productName;
         }

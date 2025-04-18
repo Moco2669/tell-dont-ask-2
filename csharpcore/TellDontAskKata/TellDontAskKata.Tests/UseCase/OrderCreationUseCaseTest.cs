@@ -44,10 +44,10 @@ namespace TellDontAskKata.Tests.UseCase
         [Fact]
         public void SellMultipleItems()
         {
-            var saladRequest = new SellItemRequest(Product1Name, SaladQuantity);
-            var tomatoRequest = new SellItemRequest(Product2Name, TomatoQuantity);
+            var saladRequest = new ItemToOrder(Product1Name, SaladQuantity);
+            var tomatoRequest = new ItemToOrder(Product2Name, TomatoQuantity);
 
-            var requests = new List<SellItemRequest> { saladRequest, tomatoRequest };
+            var requests = new List<ItemToOrder> { saladRequest, tomatoRequest };
             var request = new SellItemsRequest(requests);
             
             _useCase.Run(request);
@@ -74,7 +74,7 @@ namespace TellDontAskKata.Tests.UseCase
         public void UnknownProduct()
         {
             var unknownProductName = "unknown product";
-            var requests = new List<SellItemRequest>() { new SellItemRequest(unknownProductName) };
+            var requests = new List<ItemToOrder>() { new ItemToOrder(unknownProductName) };
             var request = new SellItemsRequest(requests);
 
             Action actionToTest = () => _useCase.Run(request);
