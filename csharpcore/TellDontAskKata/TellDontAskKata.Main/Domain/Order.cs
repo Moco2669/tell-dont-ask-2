@@ -28,14 +28,19 @@ namespace TellDontAskKata.Main.Domain
             Id = id;
         }
 
-        public void AddItem(OrderItem orderItem)
+        public Order(List<OrderItem> orderItems) : this()
+        {
+            AddItems(orderItems);
+        }
+
+        private void AddItem(OrderItem orderItem)
         {
             Items.Add(orderItem);
             Tax += orderItem.Tax;
             Total += orderItem.TaxedAmount;
         }
 
-        public void AddItems(List<OrderItem> orderItems)
+        private void AddItems(List<OrderItem> orderItems)
         {
             foreach(OrderItem item in orderItems) AddItem(item);
         }

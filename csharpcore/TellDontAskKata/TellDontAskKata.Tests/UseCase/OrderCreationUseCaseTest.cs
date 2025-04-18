@@ -74,8 +74,8 @@ namespace TellDontAskKata.Tests.UseCase
         public void UnknownProduct()
         {
             var unknownProductName = "unknown product";
-            var requests = new List<ItemToOrder>() { new ItemToOrder(unknownProductName) };
-            var request = new SellItemsRequest(requests);
+            var itemsToOrder = new List<ItemToOrder>() { new ItemToOrder(unknownProductName) };
+            var request = new SellItemsRequest(itemsToOrder);
 
             Action actionToTest = () => _useCase.Run(request);
 

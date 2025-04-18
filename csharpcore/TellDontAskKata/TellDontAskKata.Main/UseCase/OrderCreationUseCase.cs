@@ -20,9 +20,7 @@ namespace TellDontAskKata.Main.UseCase
 
         public void Run(SellItemsRequest request)
         {
-            var itemsToOrder = ItemsToOrderFrom(request);
-            var order = new Order();
-            order.AddItems(itemsToOrder);
+            var order = new Order(ItemsToOrderFrom(request));
 
             _orderRepository.Save(order);
         }
@@ -30,7 +28,8 @@ namespace TellDontAskKata.Main.UseCase
         private List<OrderItem> ItemsToOrderFrom(SellItemsRequest request)
         {
             List<OrderItem> orderItems = new List<OrderItem>();
-            foreach(var itemRequest in request.ItemsToOrder){
+            foreach (var itemRequest in request.ItemsToOrder)
+            {
                 var product = _productCatalog.GetByName(itemRequest.ProductName);
                 orderItems.Add(new OrderItem(product, itemRequest.Quantity));
             }

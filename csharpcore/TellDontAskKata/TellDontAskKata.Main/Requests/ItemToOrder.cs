@@ -2,7 +2,7 @@
 {
     public class ItemToOrder
     {
-        public ItemToOrder()
+        private ItemToOrder()
         {
         }
 
